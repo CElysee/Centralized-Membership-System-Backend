@@ -2,12 +2,6 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import User from './models/user.model';
-
-// import Application from './models/application';
-// import Applicant from './models/applicant';
-// import { SimulationResultsModel, SimulationsModel } from 'src/simulation/entities';
-// import { ApplicationDetail, ApplicationProduct } from './models';
-
 /**
  * Database module.
  */
