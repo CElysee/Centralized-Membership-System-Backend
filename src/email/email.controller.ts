@@ -18,11 +18,12 @@ import {
 
 import EmailService from './email.service';
 import { SendEmailDto, EmailResponseDto } from './dto';
+import { Public } from 'src/shared';
 
 @ApiTags('Email')
 @Controller('email')
 export default class EmailController {
-  constructor(private readonly emailService: EmailService) {}
+  constructor(private readonly emailService: EmailService) { }
 
   @Post('send')
   @ApiOperation({
@@ -156,7 +157,7 @@ export default class EmailController {
       );
     }
   }
-
+  @Public()
   @Get('verify-connection')
   @ApiOperation({
     summary: 'Verify SMTP connection',
@@ -195,7 +196,7 @@ export default class EmailController {
     }
   }
 
- 
+
   @Get('health')
   @ApiOperation({
     summary: 'Email service health check',

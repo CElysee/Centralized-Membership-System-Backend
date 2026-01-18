@@ -15,7 +15,15 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth()
     .addTag('Authentication', 'User authentication and authorization endpoints')
+    .addTag('Roles', 'Role management apis')
+    .addTag('Email', 'Email related Utilities')
+    .addTag('Users', 'Users role management apis')
+    .addTag('Files', 'Files management apis')
+    .addTag('Applications', 'Membership application apis')
+    .addTag('Associations', 'Associations management apis')
+    .addTag('Companies', 'Companies management apis')
     .build();
+
 
   // Create the Swagger document
   const document = SwaggerModule.createDocument(app, config);

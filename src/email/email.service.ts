@@ -51,19 +51,19 @@ export default class EmailService {
       });
 
       const from = {
-        email: emailData.from ?? 'o2labbs@gmail.com',
-        name: emailData.fromName || 'O2 Labbs',
+        email: emailData.from ?? 'tresoramizero1@gmail.com',
+        name: emailData.fromName || '63 Inc',
       };
 
       let replyTo: { email: string; name?: string } | undefined;
       if (!emailData.isReplyable) {
         replyTo = {
-          email: 'o2labbs@gmail.com',
+          email: 'tresoramizero1@gmail.com',
         };
       } else if (emailData.replyTo) {
         replyTo = {
           email: emailData.replyTo,
-          name: emailData.replyToName || 'O2 Labbs',
+          name: emailData.replyToName || '63 Inc',
         };
       }
 
@@ -89,6 +89,8 @@ export default class EmailService {
         messageId,
       };
     } catch (error: any) {
+      console.log("error from email sending")
+      console.dir(error,{depth:null})
       this.logger.error(`Failed to send email: ${error.message}`, error.stack);
 
       return {
@@ -109,12 +111,16 @@ export default class EmailService {
       // SendGrid doesn't have a direct verify like SMTP, but we can test with a minimal call
       // This will throw if API key is invalid
       await SendGrid.send({
-        to: 'test@example.com',
-        from: 'test@example.com',
+        to: 'edmondgaks@gmail.com',
+        from: 'tresoramizero1@gmail.com',
         subject: 'Connection Test',
         text: 'Testing SendGrid connection',
-      }).catch(() => {
-        // Ignore actual send, we just want to verify auth
+      })
+      .then((res)=>{
+        console.log("Email sent successfully", res);
+      })
+      .catch((error) => {
+        console.log("unable to send email",error.response.body);
       });
 
       this.logger.log('SendGrid connection verified successfully');

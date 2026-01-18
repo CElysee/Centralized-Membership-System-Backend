@@ -75,7 +75,7 @@ export default class SendEmailDto {
 
   @ApiPropertyOptional({
     description: 'Custom reply-to email address (only used if isReplyable is true)',
-    example: 'o2labbs@gmail.com',
+    example: '63inc@gmail.com',
     format: 'email',
   })
   @IsOptional()
