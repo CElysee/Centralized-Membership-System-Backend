@@ -8,7 +8,22 @@ import {
   CreatedAt,
   UpdatedAt,
   BeforeCreate,
+  BelongsToMany,
+  HasMany,
+  ForeignKey,
+  Default,
 } from 'sequelize-typescript';
+import Role from './role.model';
+import UserRole from './user-role.model';
+import Document from './document.model';
+import MembershipApplication from './membership-application.model';
+
+export enum UserStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  PENDING_VERIFICATION = 'PENDING_VERIFICATION',
+  SUSPENDED = 'SUSPENDED',
+}
 
 @Table({
   tableName: 'users',
@@ -17,15 +32,13 @@ import {
 })
 export default class User extends Model<User> {
   @PrimaryKey
-  @Column({
-    type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
-  })
+  @Default(DataType.UUIDV4)
+  @Column(DataType.UUID)
   declare id: string;
 
   @Column({
     type: DataType.STRING,
-    allowNull: false
+    allowNull: false,
   })
   declare fullName: string;
 
@@ -48,6 +61,12 @@ export default class User extends Model<User> {
     allowNull: false,
   })
   declare password: string;
+
+  @Column({
+    type: DataType.ENUM(...Object.values(UserStatus)),
+    defaultValue: UserStatus.PENDING_VERIFICATION,
+  })
+  declare status: UserStatus;
 
   @Column({
     type: DataType.BOOLEAN,
@@ -92,7 +111,7 @@ export default class User extends Model<User> {
   declare otpApproved?: boolean;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.TEXT,
     defaultValue: null,
   })
   declare confirmationToken?: string;
@@ -102,6 +121,30 @@ export default class User extends Model<User> {
     defaultValue: null,
   })
   declare confirmationSentAt?: Date;
+
+  @Column({
+    type: DataType.DATE,
+    defaultValue: null,
+  })
+  declare emailVerifiedAt?: Date;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  declare emailVerified: boolean;
+
+  @Column({
+    type: DataType.DATE,
+    defaultValue: null,
+  })
+  declare phoneVerifiedAt?: Date;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  declare phoneVerified: boolean;
 
   @Column({
     type: DataType.STRING,
@@ -116,22 +159,62 @@ export default class User extends Model<User> {
   declare lastSignedDate?: Date;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.TEXT,
     defaultValue: null,
   })
   declare resetToken?: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.DATE,
     defaultValue: null,
   })
-  declare resetEmailToken?: string;
+  declare resetTokenExpiresAt?: Date;
 
   @Column({
     type: DataType.STRING,
     defaultValue: null,
   })
-  declare resetEmail?: string;
+  declare profilePictureUrl?: string;
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: true,
+  })
+  declare dateOfBirth?: Date;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  declare nationalId?: string;
+
+  @Column({
+    type: DataType.TEXT,
+    allowNull: true,
+  })
+  declare address?: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  declare city?: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  declare country?: string;
+
+  // Relationships
+  @BelongsToMany(() => Role, () => UserRole)
+  declare roles: Role[];
+
+  @HasMany(() => Document)
+  declare documents: Document[];
+
+  @HasMany(() => MembershipApplication)
+  declare applications: MembershipApplication[];
 
   @CreatedAt
   declare createdAt: Date;
@@ -144,6 +227,11 @@ export default class User extends Model<User> {
     instance.confirmationToken = randomUUID();
     instance.confirmationSentAt = new Date();
   }
+
+  /**
+   * Get role names as string array (for JWT payload)
+   */
+  getRoleNames(): string[] {
+    return this.roles?.map((role) => role.name) || [];
+  }
 }
-
-
