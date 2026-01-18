@@ -22,7 +22,7 @@ export class JwtAuthGuard implements CanActivate {
    * @param {ExecutionContext} context - The context of the request.
    * @returns {boolean | Promise<boolean> | Observable<boolean>}
    * Returns true if the request has a valid token, false otherwise.
-   * @throws {RpcException} Throws an exception if the Authorization header is missing or the token is invalid.
+   * @throws {Unauthorized Exception} Throws an exception if the Authorization header is missing or the token is invalid.
    */
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const requestContext = context.switchToHttp().getRequest();
