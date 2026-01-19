@@ -51,19 +51,19 @@ export default class EmailService {
       });
 
       const from = {
-        email: emailData.from ?? 'tresoramizero1@gmail.com',
-        name: emailData.fromName || '63 Inc',
+        email: emailData.from,
+        name: emailData.fromName,
       };
 
       let replyTo: { email: string; name?: string } | undefined;
       if (!emailData.isReplyable) {
         replyTo = {
-          email: 'tresoramizero1@gmail.com',
+          email: 'thierry@rwandatourismchamber.org',
         };
       } else if (emailData.replyTo) {
         replyTo = {
           email: emailData.replyTo,
-          name: emailData.replyToName || '63 Inc',
+          name: emailData.replyToName,
         };
       }
 
