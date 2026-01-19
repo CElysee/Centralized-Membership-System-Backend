@@ -1304,7 +1304,7 @@ export default class AuthService {
     const textContent = emailVerificationTextTemplate(user.fullName, verificationLink);
 
     await this.emailService.sendEmail({
-      from: this.configService.get<string>('EMAIL_FROM') || 'tresoramizero1@gmail.com',
+      from: this.configService.get<string>('EMAIL_FROM')!,
       fromName: 'CMS System',
       to: [user.email],
       toNames: [user.fullName],
